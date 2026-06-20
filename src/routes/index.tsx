@@ -40,6 +40,7 @@ function NothingHappens() {
   const [showVictory, setShowVictory] = useState(false);
   const [copied, setCopied] = useState(false);
   const hydrated = useRef(false);
+  const domeDown = useRef(false);
 
   useEffect(() => {
     try {
