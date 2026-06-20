@@ -168,7 +168,7 @@ function NothingHappens() {
         </button>
 
         <div
-          className="mt-10 min-h-[1.5rem] text-base sm:text-lg text-black/80 text-center font-light tracking-wide"
+          className="mt-10 min-h-[2.5rem] text-2xl sm:text-3xl text-black/80 text-center font-light tracking-wide"
           aria-live="polite"
         >
           {message}
