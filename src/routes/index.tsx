@@ -20,12 +20,11 @@ const COMPLETED_KEY = "nh:completed";
 
 const FINAL = 1_000_324_591;
 
-function messageFor(count: number, completed: boolean): string {
-  if (completed) return "nothing happens";
+function messageFor(count: number): string {
   if (count === 100_000) return "still nothing happens";
   if (count === 1_000_000) return "Is this some kind of game?";
   if (count === FINAL) return "okay. you win. why?";
-  return "nothing happens";
+  return "";
 }
 
 function NothingHappens() {
@@ -89,15 +88,17 @@ function NothingHappens() {
     const next = count + 1;
     setCount(next);
 
-    const msg = messageFor(next, completed);
+    const msg = messageFor(next);
     setMessage(msg);
 
     if (messageTimer.current) {
       window.clearTimeout(messageTimer.current);
     }
-    messageTimer.current = window.setTimeout(() => {
-      setMessage("");
-    }, 600);
+    if (msg) {
+      messageTimer.current = window.setTimeout(() => {
+        setMessage("");
+      }, 600);
+    }
 
     if (!completed && next === FINAL) {
       setCompleted(true);
