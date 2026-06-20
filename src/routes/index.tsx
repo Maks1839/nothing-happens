@@ -89,16 +89,18 @@ function NothingHappens() {
       domeDown.current = false;
     }, 120);
 
-    const next = count + 1;
+    const next = trueCount.current + 1;
+    trueCount.current = next;
     setCount(next);
 
     const msg = messageFor(next);
-    setMessage(msg);
+    if (msg && !triggeredCounts.current.has(next)) {
+      triggeredCounts.current.add(next);
+      setMessage(msg);
 
-    if (messageTimer.current) {
-      window.clearTimeout(messageTimer.current);
-    }
-    if (msg) {
+      if (messageTimer.current) {
+        window.clearTimeout(messageTimer.current);
+      }
       messageTimer.current = window.setTimeout(() => {
         setMessage("");
       }, 600);
@@ -119,6 +121,8 @@ function NothingHappens() {
   }
 
   function restart() {
+    trueCount.current = 0;
+    triggeredCounts.current.clear();
     setCount(0);
     setCompleted(false);
     setMessage("");
