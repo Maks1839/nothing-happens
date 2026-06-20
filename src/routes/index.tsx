@@ -40,6 +40,7 @@ function NothingHappens() {
   const [showVictory, setShowVictory] = useState(false);
   const [copied, setCopied] = useState(false);
   const hydrated = useRef(false);
+  const domeDown = useRef(false);
 
   useEffect(() => {
     try {
@@ -78,8 +79,13 @@ function NothingHappens() {
   const messageTimer = useRef<number | null>(null);
 
   function handlePress() {
+    const alreadyDown = domeDown.current;
+    domeDown.current = true;
     setPressed(true);
-    window.setTimeout(() => setPressed(false), 120);
+    window.setTimeout(() => {
+      setPressed(false);
+      domeDown.current = false;
+    }, 120);
 
     const next = count + 1;
     setCount(next);
@@ -99,11 +105,13 @@ function NothingHappens() {
       window.setTimeout(() => setShowVictory(true), 400);
     }
 
-    // Telegram haptic (subtle)
-    const tg = (window as any).Telegram?.WebApp;
-    try {
-      tg?.HapticFeedback?.impactOccurred?.("light");
-    } catch {}
+    // Telegram haptic — only when the dome actually begins pressing down
+    if (!alreadyDown) {
+      const tg = (window as any).Telegram?.WebApp;
+      try {
+        tg?.HapticFeedback?.impactOccurred?.("light");
+      } catch {}
+    }
   }
 
   function restart() {
