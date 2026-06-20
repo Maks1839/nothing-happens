@@ -147,7 +147,7 @@ function NothingHappens() {
           }}
         >
           <img
-            src={redButton}
+            src={redButtonAsset.url}
             alt=""
             width={1024}
             height={1024}
