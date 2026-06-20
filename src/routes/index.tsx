@@ -39,11 +39,15 @@ function NothingHappens() {
   const [copied, setCopied] = useState(false);
   const hydrated = useRef(false);
   const domeDown = useRef(false);
+  const trueCount = useRef(0);
+  const triggeredCounts = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setCount(parseInt(raw, 10) || 0);
+      const parsed = parseInt(raw || "", 10) || 0;
+      setCount(parsed);
+      trueCount.current = parsed;
       setCompleted(localStorage.getItem(COMPLETED_KEY) === "1");
     } catch {}
     hydrated.current = true;
@@ -85,16 +89,18 @@ function NothingHappens() {
       domeDown.current = false;
     }, 120);
 
-    const next = count + 1;
+    const next = trueCount.current + 1;
+    trueCount.current = next;
     setCount(next);
 
     const msg = messageFor(next);
-    setMessage(msg);
+    if (msg && !triggeredCounts.current.has(next)) {
+      triggeredCounts.current.add(next);
+      setMessage(msg);
 
-    if (messageTimer.current) {
-      window.clearTimeout(messageTimer.current);
-    }
-    if (msg) {
+      if (messageTimer.current) {
+        window.clearTimeout(messageTimer.current);
+      }
       messageTimer.current = window.setTimeout(() => {
         setMessage("");
       }, 600);
@@ -115,6 +121,8 @@ function NothingHappens() {
   }
 
   function restart() {
+    trueCount.current = 0;
+    triggeredCounts.current.clear();
     setCount(0);
     setCompleted(false);
     setMessage("");
