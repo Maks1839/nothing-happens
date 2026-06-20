@@ -74,13 +74,24 @@ function NothingHappens() {
     } catch {}
   }, [completed]);
 
+  const messageTimer = useRef<number | null>(null);
+
   function handlePress() {
     setPressed(true);
     window.setTimeout(() => setPressed(false), 120);
 
     const next = count + 1;
     setCount(next);
-    setMessage(messageFor(next, completed));
+
+    const msg = messageFor(next, completed);
+    setMessage(msg);
+
+    if (messageTimer.current) {
+      window.clearTimeout(messageTimer.current);
+    }
+    messageTimer.current = window.setTimeout(() => {
+      setMessage("");
+    }, 600);
 
     if (!completed && next === FINAL) {
       setCompleted(true);
