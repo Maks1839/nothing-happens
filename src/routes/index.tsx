@@ -88,15 +88,17 @@ function NothingHappens() {
     const next = count + 1;
     setCount(next);
 
-    const msg = messageFor(next, completed);
+    const msg = messageFor(next);
     setMessage(msg);
 
     if (messageTimer.current) {
       window.clearTimeout(messageTimer.current);
     }
-    messageTimer.current = window.setTimeout(() => {
-      setMessage("");
-    }, 600);
+    if (msg) {
+      messageTimer.current = window.setTimeout(() => {
+        setMessage("");
+      }, 600);
+    }
 
     if (!completed && next === FINAL) {
       setCompleted(true);
