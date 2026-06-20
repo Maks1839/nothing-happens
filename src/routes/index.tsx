@@ -45,7 +45,9 @@ function NothingHappens() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setCount(parseInt(raw, 10) || 0);
+      const parsed = parseInt(raw || "", 10) || 0;
+      setCount(parsed);
+      trueCount.current = parsed;
       setCompleted(localStorage.getItem(COMPLETED_KEY) === "1");
     } catch {}
     hydrated.current = true;
