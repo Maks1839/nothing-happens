@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import redButtonAsset from "@/assets/red-button-new.png.asset.json";
+import metalBaseAsset from "@/assets/metal-base.png.asset.json";
+import redDomeAsset from "@/assets/red-dome.png.asset.json";
 import { WALLET_ADDRESS } from "@/lib/config";
 
 export const Route = createFileRoute("/")({
@@ -151,20 +152,32 @@ function NothingHappens() {
           onClick={handlePress}
           aria-label="Press the button"
           className="select-none focus:outline-none"
-          style={{
-            transform: pressed ? "translateY(4px) scale(0.97)" : "translateY(0) scale(1)",
-            transition: "transform 120ms ease-out",
-            WebkitTapHighlightColor: "transparent",
-          }}
+          style={{ WebkitTapHighlightColor: "transparent" }}
         >
-          <img
-            src={redButtonAsset.url}
-            alt=""
-            width={1024}
-            height={1024}
-            draggable={false}
-            className="w-[68vw] max-w-[340px] h-auto pointer-events-none"
-          />
+          <div className="relative w-[68vw] max-w-[340px]">
+            <img
+              src={metalBaseAsset.url}
+              alt=""
+              width={1024}
+              height={1024}
+              draggable={false}
+              className="w-full h-auto pointer-events-none"
+            />
+            <img
+              src={redDomeAsset.url}
+              alt=""
+              width={1024}
+              height={1024}
+              draggable={false}
+              className="absolute inset-0 w-full h-auto pointer-events-none"
+              style={{
+                transform: pressed
+                  ? "translateY(6px) scale(0.96)"
+                  : "translateY(0) scale(1)",
+                transition: "transform 120ms ease-out",
+              }}
+            />
+          </div>
         </button>
 
         <div
