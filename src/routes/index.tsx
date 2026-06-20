@@ -74,13 +74,24 @@ function NothingHappens() {
     } catch {}
   }, [completed]);
 
+  const messageTimer = useRef<number | null>(null);
+
   function handlePress() {
     setPressed(true);
     window.setTimeout(() => setPressed(false), 120);
 
     const next = count + 1;
     setCount(next);
-    setMessage(messageFor(next, completed));
+
+    const msg = messageFor(next, completed);
+    setMessage(msg);
+
+    if (messageTimer.current) {
+      window.clearTimeout(messageTimer.current);
+    }
+    messageTimer.current = window.setTimeout(() => {
+      setMessage("");
+    }, 600);
 
     if (!completed && next === FINAL) {
       setCompleted(true);
@@ -157,7 +168,7 @@ function NothingHappens() {
         </button>
 
         <div
-          className="mt-10 min-h-[1.5rem] text-base sm:text-lg text-black/80 text-center font-light tracking-wide"
+          className="mt-10 min-h-[2.5rem] text-2xl sm:text-3xl text-black/80 text-center font-light tracking-wide"
           aria-live="polite"
         >
           {message}
