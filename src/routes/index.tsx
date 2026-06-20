@@ -39,6 +39,8 @@ function NothingHappens() {
   const [copied, setCopied] = useState(false);
   const hydrated = useRef(false);
   const domeDown = useRef(false);
+  const trueCount = useRef(0);
+  const triggeredCounts = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     try {
