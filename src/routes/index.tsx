@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import redButton from "@/assets/red-button.png";
+import redButtonAsset from "@/assets/red-button-new.png.asset.json";
 import { WALLET_ADDRESS } from "@/lib/config";
 
 export const Route = createFileRoute("/")({
