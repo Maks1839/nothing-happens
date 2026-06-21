@@ -24,8 +24,10 @@ function messageFor(count: number): string {
   if (count === 100_000) return "still nothing happens";
   if (count === 1_000_000) return "Is this some kind of game?";
   if (count === FINAL) return "okay. you win. why?";
-  return "";
+  return "nothing happens";
 }
+
+const MILESTONES = new Set<number>([100_000, 1_000_000, FINAL]);
 
 function NothingHappens() {
   const [count, setCount] = useState<number>(0);
