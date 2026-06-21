@@ -23,8 +23,8 @@ const FINAL = 1_000_324_591;
 function messageFor(count: number): string {
   if (count === 100_000) return "still nothing happens";
   if (count === 1_000_000) return "Is this some kind of game?";
-  if (count === FINAL) return "okay. you win. why?";
-  if (count >= 100) return "?";
+  if (count === FINAL) return "Okay. You win. Why?";
+  if (count >= 100 && count < 100_000) return "?";
   return "nothing happens";
 }
 
