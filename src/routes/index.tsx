@@ -96,8 +96,9 @@ function NothingHappens() {
     setCount(next);
 
     const msg = messageFor(next);
-    if (msg && !triggeredCounts.current.has(next)) {
-      triggeredCounts.current.add(next);
+    const isMilestone = MILESTONES.has(next);
+    if (!isMilestone || !triggeredCounts.current.has(next)) {
+      if (isMilestone) triggeredCounts.current.add(next);
       setMessage(msg);
 
       if (messageTimer.current) {
