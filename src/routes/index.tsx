@@ -38,6 +38,7 @@ function NothingHappens() {
   const [showAbout, setShowAbout] = useState(false);
   const [showDonate, setShowDonate] = useState(false);
   const [showCrypto, setShowCrypto] = useState(false);
+  const [selectedCryptoNetwork, setSelectedCryptoNetwork] = useState<string | null>(null);
   const [showVictory, setShowVictory] = useState(false);
   const [copied, setCopied] = useState(false);
   const hydrated = useRef(false);
