@@ -267,20 +267,69 @@ function NothingHappens() {
           onClose={() => {
             setShowCrypto(false);
             setShowDonate(false);
+            setSelectedCryptoNetwork(null);
           }}
         >
           <div className="mx-auto max-w-[460px] px-6 py-10">
-            <h2 className="text-xl font-medium mb-4">Pay with Crypto</h2>
-            <p className="text-[15px] text-black/70 mb-3">Send to this wallet address:</p>
-            <div className="rounded-xl border border-black/10 p-3 break-all font-mono text-[13px] text-black/80 mb-3">
-              {WALLET_ADDRESS}
-            </div>
-            <button
-              onClick={copyWallet}
-              className="w-full h-11 rounded-full border border-black/15 text-[14px] font-medium hover:bg-black/[0.03] transition-colors"
-            >
-              {copied ? "Copied" : "Copy address"}
-            </button>
+            {!selectedCryptoNetwork ? (
+              <>
+                <h2 className="text-xl font-medium mb-6">Pay with Crypto</h2>
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={() => setSelectedCryptoNetwork("gram")}
+                    className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
+                  >
+                    Gram (ex TON)
+                  </button>
+                  <button
+                    onClick={() => setSelectedCryptoNetwork("trc20")}
+                    className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
+                  >
+                    TRC-20
+                  </button>
+                  <button
+                    onClick={() => setSelectedCryptoNetwork("erc20")}
+                    className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
+                  >
+                    ERC-20
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setSelectedCryptoNetwork(null)}
+                  className="text-sm text-black/60 hover:text-black transition-colors mb-4"
+                >
+                  ← Back
+                </button>
+                <h2 className="text-xl font-medium mb-4">
+                  {selectedCryptoNetwork === "gram" && "Gram (ex TON)"}
+                  {selectedCryptoNetwork === "trc20" && "TRC-20"}
+                  {selectedCryptoNetwork === "erc20" && "ERC-20"}
+                </h2>
+                <p className="text-[15px] text-black/70 mb-3">Send to this wallet address:</p>
+                <div className="rounded-xl border border-black/10 p-3 break-all font-mono text-[13px] text-black/80 mb-3">
+                  {selectedCryptoNetwork === "gram" && "UQAwXV8ItroFdOZacIuScpOk__5OmL40SwxByUIJQ2dd8K92"}
+                  {selectedCryptoNetwork === "trc20" && "TUXsgPJ8vKrJ4SdEJHK53qTPmUfg6rzDwV"}
+                  {selectedCryptoNetwork === "erc20" && "0x2566ce8A17EcbD83dC1FA41932c32e326827e640"}
+                </div>
+                <button
+                  onClick={() =>
+                    copyWallet(
+                      selectedCryptoNetwork === "gram"
+                        ? "UQAwXV8ItroFdOZacIuScpOk__5OmL40SwxByUIJQ2dd8K92"
+                        : selectedCryptoNetwork === "trc20"
+                        ? "TUXsgPJ8vKrJ4SdEJHK53qTPmUfg6rzDwV"
+                        : "0x2566ce8A17EcbD83dC1FA41932c32e326827e640"
+                    )
+                  }
+                  className="w-full h-11 rounded-full border border-black/15 text-[14px] font-medium hover:bg-black/[0.03] transition-colors"
+                >
+                  {copied ? "Copied" : "Copy address"}
+                </button>
+              </>
+            )}
           </div>
         </Modal>
       )}
