@@ -24,6 +24,7 @@ function messageFor(count: number): string {
   if (count === 100_000) return "still nothing happens";
   if (count === 1_000_000) return "Is this some kind of game?";
   if (count === FINAL) return "okay. you win. why?";
+  if (count >= 100) return "?";
   return "nothing happens";
 }
 
