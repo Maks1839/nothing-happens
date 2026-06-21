@@ -147,9 +147,9 @@ function NothingHappens() {
     }
   }
 
-  async function copyWallet() {
+  async function copyWallet(address: string) {
     try {
-      await navigator.clipboard.writeText(WALLET_ADDRESS);
+      await navigator.clipboard.writeText(address);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {}
