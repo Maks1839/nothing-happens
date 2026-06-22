@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import redButtonAsset from "@/assets/red-button-v2.png.asset.json";
+import { createStarsInvoice } from "@/lib/telegram-stars.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,12 +40,17 @@ function NothingHappens() {
   const [showDonate, setShowDonate] = useState(false);
   const [showCrypto, setShowCrypto] = useState(false);
   const [selectedCryptoNetwork, setSelectedCryptoNetwork] = useState<string | null>(null);
+  const [showStars, setShowStars] = useState(false);
+  const [customStars, setCustomStars] = useState<string>("");
+  const [starsStatus, setStarsStatus] = useState<string>("");
+  const [starsLoading, setStarsLoading] = useState(false);
   const [showVictory, setShowVictory] = useState(false);
   const [copied, setCopied] = useState(false);
   const hydrated = useRef(false);
   const domeDown = useRef(false);
   const trueCount = useRef(0);
   const triggeredCounts = useRef<Set<number>>(new Set());
+  const createStarsInvoiceFn = useServerFn(createStarsInvoice);
 
   useEffect(() => {
     try {
@@ -133,16 +140,41 @@ function NothingHappens() {
     setShowVictory(false);
   }
 
-  function payWithStars() {
+  async function payWithStars(amount: number) {
+    setStarsStatus("");
+    if (!Number.isFinite(amount) || amount < 1 || amount > 2500) {
+      setStarsStatus("Pick between 1 and 2500 ⭐");
+      return;
+    }
     const tg = (window as any).Telegram?.WebApp;
-    // Backend hook placeholder: in production, request an invoice link from the server
-    // and open it via tg.openInvoice(slug, callback).
-    if (tg?.openInvoice) {
-      try {
-        tg.showAlert?.("Telegram Stars payment is not yet configured.");
-      } catch {}
-    } else {
-      alert("Telegram Stars payment is not yet configured.");
+    if (!tg?.openInvoice) {
+      setStarsStatus("Open this app inside Telegram to pay with Stars.");
+      return;
+    }
+    setStarsLoading(true);
+    try {
+      const { url } = await createStarsInvoiceFn({ data: { amount } });
+      tg.openInvoice(url, (status: string) => {
+        if (status === "paid") {
+          setStarsStatus("Thank you! ⭐");
+          try { tg.HapticFeedback?.notificationOccurred?.("success"); } catch {}
+          window.setTimeout(() => {
+            setShowStars(false);
+            setShowDonate(false);
+            setStarsStatus("");
+          }, 1500);
+        } else if (status === "pending") {
+          setStarsStatus("Processing…");
+        } else if (status === "failed") {
+          setStarsStatus("Payment failed. Try again?");
+        } else {
+          setStarsStatus("");
+        }
+      });
+    } catch (err: any) {
+      setStarsStatus(err?.message || "Could not create invoice");
+    } finally {
+      setStarsLoading(false);
     }
   }
 
@@ -250,7 +282,7 @@ function NothingHappens() {
                 Pay with Crypto
               </button>
               <button
-                onClick={payWithStars}
+                onClick={() => { setStarsStatus(""); setShowStars(true); }}
                 className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
               >
                 Pay with Telegram Stars
@@ -328,6 +360,52 @@ function NothingHappens() {
                   {copied ? "Copied" : "Copy address"}
                 </button>
               </>
+            )}
+          </div>
+        </Modal>
+      )}
+
+      {/* Stars modal */}
+      {showStars && (
+        <Modal onClose={() => { setShowStars(false); setStarsStatus(""); setCustomStars(""); }}>
+          <div className="mx-auto max-w-[460px] px-6 py-10">
+            <h2 className="text-xl font-medium mb-6">Pay with Telegram Stars</h2>
+            <p className="text-[15px] leading-relaxed text-black/70 mb-6">
+              Choose an amount of ⭐ to send.
+            </p>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[10, 50, 100, 500].map((n) => (
+                <button
+                  key={n}
+                  disabled={starsLoading}
+                  onClick={() => payWithStars(n)}
+                  className="h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors disabled:opacity-50"
+                >
+                  {n} ⭐
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={2500}
+                placeholder="Custom amount"
+                value={customStars}
+                onChange={(e) => setCustomStars(e.target.value)}
+                className="flex-1 h-12 px-4 rounded-full border border-black/15 text-[15px] outline-none focus:border-black/40"
+              />
+              <button
+                disabled={starsLoading || !customStars}
+                onClick={() => payWithStars(parseInt(customStars, 10))}
+                className="h-12 px-5 rounded-full bg-black text-white text-[14px] font-medium hover:bg-black/90 transition-colors disabled:opacity-50"
+              >
+                Send
+              </button>
+            </div>
+            {starsStatus && (
+              <p className="mt-4 text-[14px] text-black/70 text-center">{starsStatus}</p>
             )}
           </div>
         </Modal>
