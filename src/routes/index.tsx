@@ -244,16 +244,16 @@ function NothingHappens() {
             </p>
             <div className="flex flex-col gap-3">
               <button
-                onClick={payWithStars}
-                className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
-              >
-                Pay with Telegram Stars
-              </button>
-              <button
                 onClick={() => setShowCrypto(true)}
                 className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
               >
                 Pay with Crypto
+              </button>
+              <button
+                onClick={payWithStars}
+                className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
+              >
+                Pay with Telegram Stars
               </button>
             </div>
           </div>
