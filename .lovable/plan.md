@@ -1,0 +1,1 @@
+In the Donate modal (`src/routes/index.tsx`, lines 245–258), swap the order of the two buttons so that **"Pay with Crypto"** appears first and **"Pay with Telegram Stars"** appears second.
