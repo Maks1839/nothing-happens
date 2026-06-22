@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import redButtonAsset from "@/assets/red-button-v2.png.asset.json";
+import { createStarsInvoice } from "@/lib/telegram-stars.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,12 +40,17 @@ function NothingHappens() {
   const [showDonate, setShowDonate] = useState(false);
   const [showCrypto, setShowCrypto] = useState(false);
   const [selectedCryptoNetwork, setSelectedCryptoNetwork] = useState<string | null>(null);
+  const [showStars, setShowStars] = useState(false);
+  const [customStars, setCustomStars] = useState<string>("");
+  const [starsStatus, setStarsStatus] = useState<string>("");
+  const [starsLoading, setStarsLoading] = useState(false);
   const [showVictory, setShowVictory] = useState(false);
   const [copied, setCopied] = useState(false);
   const hydrated = useRef(false);
   const domeDown = useRef(false);
   const trueCount = useRef(0);
   const triggeredCounts = useRef<Set<number>>(new Set());
+  const createStarsInvoiceFn = useServerFn(createStarsInvoice);
 
   useEffect(() => {
     try {
@@ -133,16 +140,41 @@ function NothingHappens() {
     setShowVictory(false);
   }
 
-  function payWithStars() {
+  async function payWithStars(amount: number) {
+    setStarsStatus("");
+    if (!Number.isFinite(amount) || amount < 1 || amount > 2500) {
+      setStarsStatus("Pick between 1 and 2500 ⭐");
+      return;
+    }
     const tg = (window as any).Telegram?.WebApp;
-    // Backend hook placeholder: in production, request an invoice link from the server
-    // and open it via tg.openInvoice(slug, callback).
-    if (tg?.openInvoice) {
-      try {
-        tg.showAlert?.("Telegram Stars payment is not yet configured.");
-      } catch {}
-    } else {
-      alert("Telegram Stars payment is not yet configured.");
+    if (!tg?.openInvoice) {
+      setStarsStatus("Open this app inside Telegram to pay with Stars.");
+      return;
+    }
+    setStarsLoading(true);
+    try {
+      const { url } = await createStarsInvoiceFn({ data: { amount } });
+      tg.openInvoice(url, (status: string) => {
+        if (status === "paid") {
+          setStarsStatus("Thank you! ⭐");
+          try { tg.HapticFeedback?.notificationOccurred?.("success"); } catch {}
+          window.setTimeout(() => {
+            setShowStars(false);
+            setShowDonate(false);
+            setStarsStatus("");
+          }, 1500);
+        } else if (status === "pending") {
+          setStarsStatus("Processing…");
+        } else if (status === "failed") {
+          setStarsStatus("Payment failed. Try again?");
+        } else {
+          setStarsStatus("");
+        }
+      });
+    } catch (err: any) {
+      setStarsStatus(err?.message || "Could not create invoice");
+    } finally {
+      setStarsLoading(false);
     }
   }
 
@@ -250,7 +282,7 @@ function NothingHappens() {
                 Pay with Crypto
               </button>
               <button
-                onClick={payWithStars}
+                onClick={() => { setStarsStatus(""); setShowStars(true); }}
                 className="w-full h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors"
               >
                 Pay with Telegram Stars
