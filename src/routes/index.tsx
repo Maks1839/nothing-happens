@@ -365,6 +365,52 @@ function NothingHappens() {
         </Modal>
       )}
 
+      {/* Stars modal */}
+      {showStars && (
+        <Modal onClose={() => { setShowStars(false); setStarsStatus(""); setCustomStars(""); }}>
+          <div className="mx-auto max-w-[460px] px-6 py-10">
+            <h2 className="text-xl font-medium mb-6">Pay with Telegram Stars</h2>
+            <p className="text-[15px] leading-relaxed text-black/70 mb-6">
+              Choose an amount of ⭐ to send.
+            </p>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[10, 50, 100, 500].map((n) => (
+                <button
+                  key={n}
+                  disabled={starsLoading}
+                  onClick={() => payWithStars(n)}
+                  className="h-12 rounded-full border border-black/15 text-[15px] font-medium hover:bg-black/[0.03] transition-colors disabled:opacity-50"
+                >
+                  {n} ⭐
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={2500}
+                placeholder="Custom amount"
+                value={customStars}
+                onChange={(e) => setCustomStars(e.target.value)}
+                className="flex-1 h-12 px-4 rounded-full border border-black/15 text-[15px] outline-none focus:border-black/40"
+              />
+              <button
+                disabled={starsLoading || !customStars}
+                onClick={() => payWithStars(parseInt(customStars, 10))}
+                className="h-12 px-5 rounded-full bg-black text-white text-[14px] font-medium hover:bg-black/90 transition-colors disabled:opacity-50"
+              >
+                Send
+              </button>
+            </div>
+            {starsStatus && (
+              <p className="mt-4 text-[14px] text-black/70 text-center">{starsStatus}</p>
+            )}
+          </div>
+        </Modal>
+      )}
+
       {/* Victory modal */}
       {showVictory && (
         <Modal onClose={() => setShowVictory(false)} dismissable={false}>
