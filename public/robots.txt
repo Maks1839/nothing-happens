@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nothing-happens.lovable.app/sitemap.xml
