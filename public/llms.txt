@@ -1,0 +1,8 @@
+# Nothing Happens
+
+> An anti-dopamine clicker built for a social media detox. Press the button. Nothing happens. That's the point.
+
+Nothing Happens is a deliberately boring web app and Telegram Mini App. Whenever you feel the urge to open a social network, come here and press the big red button instead. It does nothing — and that honesty is the whole point of the detox.
+
+## Pages
+- [Home](/): The button. Press it. Nothing happens. Includes an About manifesto and a Donate option (crypto or Telegram Stars).

@@ -77,18 +77,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "nothing happens" },
-      { name: "description", content: "nothing happens" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "nothing happens" },
-      { property: "og:description", content: "nothing happens" },
+      { title: "Nothing Happens — Anti-Dopamine Social Detox Clicker" },
+      {
+        name: "description",
+        content:
+          "Nothing Happens is an anti-dopamine clicker built for a social media detox. Press the button. Nothing happens. That's the point.",
+      },
+      { name: "author", content: "Nothing Happens" },
+      { property: "og:site_name", content: "Nothing Happens" },
+      { property: "og:title", content: "Nothing Happens — Anti-Dopamine Social Detox Clicker" },
+      {
+        property: "og:description",
+        content:
+          "An anti-dopamine clicker built for a social media detox. Press the button. Nothing happens. That's the point.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "nothing happens" },
-      { name: "twitter:description", content: "nothing happens" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/286433ed-0c03-49cd-91d2-407c9414451e" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/286433ed-0c03-49cd-91d2-407c9414451e" },
+      { name: "twitter:title", content: "Nothing Happens — Anti-Dopamine Social Detox Clicker" },
+      {
+        name: "twitter:description",
+        content:
+          "An anti-dopamine clicker built for a social media detox. Press the button. Nothing happens.",
+      },
     ],
     links: [
       {
@@ -98,6 +109,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: [
       { src: "https://telegram.org/js/telegram-web-app.js" },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Nothing Happens",
+          url: "https://nothing-happens.lovable.app",
+          description:
+            "An anti-dopamine clicker built for a social media detox. Press the button. Nothing happens.",
+          publisher: {
+            "@type": "Organization",
+            name: "Nothing Happens",
+            url: "https://nothing-happens.lovable.app",
+          },
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
