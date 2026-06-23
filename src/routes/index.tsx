@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import redButtonAsset from "@/assets/red-button-v2.png.asset.json";
-import { createStarsInvoice } from "@/lib/telegram-stars.functions";
+import { createStarsInvoice } from "@/lib/telegramStars.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
