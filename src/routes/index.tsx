@@ -7,11 +7,32 @@ import { createStarsInvoice } from "@/lib/telegramStars.functions";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nothing Happens" },
-      { name: "description", content: "An anti-dopamine clicker. Press the button. Nothing happens." },
-      { property: "og:title", content: "Nothing Happens" },
-      { property: "og:description", content: "An anti-dopamine clicker. Press the button. Nothing happens." },
+      { title: "Nothing Happens — Anti-Dopamine Social Detox Clicker" },
+      {
+        name: "description",
+        content:
+          "An anti-dopamine clicker built for a social media detox. Press the button. Nothing happens. That's the point.",
+      },
+      { property: "og:title", content: "Nothing Happens — Anti-Dopamine Social Detox Clicker" },
+      {
+        property: "og:description",
+        content:
+          "An anti-dopamine clicker built for a social media detox. Press the button. Nothing happens. That's the point.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://nothing-happens.lovable.app/" },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/286433ed-0c03-49cd-91d2-407c9414451e",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/286433ed-0c03-49cd-91d2-407c9414451e",
+      },
     ],
+    links: [{ rel: "canonical", href: "https://nothing-happens.lovable.app/" }],
   }),
   component: NothingHappens,
 });
@@ -200,6 +221,7 @@ function NothingHappens() {
 
       {/* Main */}
       <main className="flex-1 flex flex-col items-center justify-center px-6">
+        <h1 className="sr-only">Nothing Happens — the anti-dopamine clicker</h1>
         <button
           onClick={handlePress}
           aria-label="Press the button"
@@ -392,6 +414,7 @@ function NothingHappens() {
                 min={1}
                 max={2500}
                 placeholder="Custom amount"
+                aria-label="Custom amount of Telegram Stars"
                 value={customStars}
                 onChange={(e) => setCustomStars(e.target.value)}
                 className="flex-1 h-12 px-4 rounded-full border border-black/15 text-[15px] outline-none focus:border-black/40"
